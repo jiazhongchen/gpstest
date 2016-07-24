@@ -4,7 +4,6 @@
 
 #include <SPI.h>
 #include "mcp_can.h"
-//#include <LiquidCrystal_I2C.h>
 #include <TinyGPS++.h>
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
@@ -121,7 +120,7 @@ void loop() {
     checkJ1939();
     check9DOF();   
     checkGPS();
-    //wifiCommunication(10000);
+    wifiCommunication(10000);
     //displayInfo();
     if (Serial2.available()) {
         String str = Serial2.readString();        
@@ -130,7 +129,8 @@ void loop() {
     if (timeStatus()!= timeNotSet) {
         if (now() != prevDisplay) { //update the display only if the time has changed
             prevDisplay = now();
-            sprintf(CR.datetime, "%04d%02d%02d%02d%02d%02d", year(), month(), day(), hour(), minute(), second());                                
+            sprintf(CR.datetime, "%04d%02d%02d%02d%02d%02d", year(), month(), day(), hour(), minute(), second());   
+            //Serial.println(CR.datetime);                            
         }
     }    
 }
@@ -186,7 +186,6 @@ void saveGPSInfo() {
         byte second = gps.time.second();
         //sprintf(CR.datetime, "%04d%02d%02d%02d%02d%02d", gps.date.year(), gps.date.month(), gps.date.day(), gps.time.hour(), gps.time.minute(), gps.time.second()); 
         sprintf(CR.datetime, "%04d%02d%02d%02d%02d%02d", year, month, day, hour, minute, second);         
-        //Serial.println(CR.datetime);
         if (timeStatus()== timeNotSet) {
             setTime(hour, minute, second, day, month, year);
             sprintf(CR.datetime, "%04d%02d%02d%02d%02d%02d", year, month, day, hour, minute, second);                    
